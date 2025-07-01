@@ -9,6 +9,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Globe } from "lucide-react"
+import ButtonUsage from "@/components/login/ButtonLanguages";
 
 export default function Page() {
     return (
@@ -34,16 +35,7 @@ export default function Page() {
                 {/*        </DropdownMenuItem>*/}
                 {/*    </DropdownMenuContent>*/}
                 {/*</DropdownMenu>*/}
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <button className="bg-gray-200 px-4 py-2 rounded">Language</button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="bg-white border border-gray-300 p-2 shadow-md">
-                        <DropdownMenuItem>English</DropdownMenuItem>
-                        <DropdownMenuItem>Chinese</DropdownMenuItem>
-                        <DropdownMenuItem>Malay</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <ButtonUsage/>
             </header>
             <main className="flex flex-1 items-center justify-center p-4 sm:p-6 md:p-8 -mt-16">
                 <LoginForm />
