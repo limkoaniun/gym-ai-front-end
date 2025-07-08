@@ -6,6 +6,8 @@ import { EquipmentForm } from '@/components/dashboard/EquipmentForm';
 import { ImagePreview } from '@/components/dashboard/ImagePreview';
 import { useToast } from '@/hooks/use-toast'; // this hasn't been changed to toastify yet
 import { identifyEquipment } from '@/ai/flows/identify-equipment-flow';
+import Cookies from "js-cookie";
+
 
 export default function Page() {
     const [equipmentName, setEquipmentName] = useState('');

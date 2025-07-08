@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import {useContext} from "react";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useRouter} from 'next/navigation';
@@ -15,13 +16,8 @@ import {PasswordStep} from "./PasswordStep";
 import {LoginFooter} from "./LoginFooter";
 import SocialMediaButtons from "@/components/ui/social-media";
 import {LoginButton} from "@/components/auth/LoginButton";
-import Cookies from "js-cookie";
+import {LoginUserContext} from "@/components/auth/LoginUserContext";
 
-const CurrentUser: { userId: number; username: string; email: string } = {
-    userId: 0,
-    username: "",
-    email: ""
-}
 
 export function LoginForm() {
     const router = useRouter();
@@ -37,6 +33,14 @@ export function LoginForm() {
         },
     });
 
+    const loginUserContext = useContext(LoginUserContext);
+
+    if (!loginUserContext) {
+        throw new Error("LoginForm must be used within a LoginUserContext.Provider");
+    }
+
+    const {setCurrentUser} = loginUserContext;
+
     const handleContinueClick = async () => {
         setIsLoading(true);
         setError(null);
@@ -50,14 +54,18 @@ export function LoginForm() {
     const onSubmitActualLogin = async (data: LoginFormData) => {
         setIsLoading(true);
         setError(null);
+
         try {
             const currentUser = await login(data);
+
             if (currentUser) {
-                // Store user data in cookies
-                CurrentUser.userId = currentUser.userId;
-                CurrentUser.username = currentUser.username;
-                CurrentUser.email = currentUser.email;
-                Cookies.set('currentUserObjectCookie', JSON.stringify(CurrentUser));
+                const user = {
+                    id: currentUser.userId,
+                    name: currentUser.username,
+                    email: currentUser.email,
+                };
+
+                setCurrentUser(user);
                 router.push('/dashboard');
             }
         } catch (err) {
