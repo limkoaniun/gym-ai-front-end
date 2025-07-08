@@ -1,6 +1,6 @@
 "use client"
 
-import {LoginForm} from "@/components/auth/login-form"
+import {LoginForm} from "@/components/auth/LoginForm"
 import ButtonUsage from "@/components/login/ButtonLanguages";
 
 export default function Page() {
