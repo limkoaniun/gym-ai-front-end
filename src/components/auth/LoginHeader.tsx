@@ -6,11 +6,11 @@ export function LoginHeader() {
             <Typography
                 variant="h4"
                 component="h1"
+                className="text-white"
                 sx={{
                     fontWeight: 600,
                     fontSize: '1.5rem',
-                    mb: 3,
-                    color: 'white',
+                    mb: 3
                 }}
             >
                 Welcome back

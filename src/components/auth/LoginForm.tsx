@@ -1,20 +1,27 @@
 "use client";
 
 import * as React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from 'next/navigation';
-import { Box, Alert } from '@mui/material';
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {useRouter} from 'next/navigation';
+import {Alert, Box} from '@mui/material';
 
-import { type LoginFormData, LoginSchema } from "@/lib/schemas";
-import { login } from "@/lib/api/auth";
-import { LoginCard } from "./LoginCard";
-import { LoginHeader } from "./LoginHeader";
-import { EmailStep } from "./EmailStep";
-import { PasswordStep } from "./PasswordStep";
-import { LoginFooter } from "./LoginFooter";
+import {type LoginFormData, LoginSchema} from "@/lib/schemas";
+import {login} from "@/lib/api/auth";
+import {LoginCard} from "./LoginCard";
+import {LoginHeader} from "./LoginHeader";
+import {EmailStep} from "./EmailStep";
+import {PasswordStep} from "./PasswordStep";
+import {LoginFooter} from "./LoginFooter";
 import SocialMediaButtons from "@/components/ui/social-media";
 import {LoginButton} from "@/components/auth/LoginButton";
+import Cookies from "js-cookie";
+
+const CurrentUser: { userId: number; username: string; email: string } = {
+    userId: 0,
+    username: "",
+    email: ""
+}
 
 export function LoginForm() {
     const router = useRouter();
@@ -46,6 +53,11 @@ export function LoginForm() {
         try {
             const currentUser = await login(data);
             if (currentUser) {
+                // Store user data in cookies
+                CurrentUser.userId = currentUser.userId;
+                CurrentUser.username = currentUser.username;
+                CurrentUser.email = currentUser.email;
+                Cookies.set('currentUserObjectCookie', JSON.stringify(CurrentUser));
                 router.push('/dashboard');
             }
         } catch (err) {
@@ -57,10 +69,10 @@ export function LoginForm() {
 
     return (
         <LoginCard>
-            <LoginHeader />
+            <LoginHeader/>
 
             {error && (
-                <Alert severity="error" sx={{ mb: 2 }}>
+                <Alert severity="error" sx={{mb: 2}}>
                     {error}
                 </Alert>
             )}
@@ -68,7 +80,7 @@ export function LoginForm() {
             <Box
                 component="form"
                 onSubmit={form.handleSubmit(onSubmitActualLogin)}
-                sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+                sx={{display: 'flex', flexDirection: 'column', gap: 2}}
             >
                 <EmailStep
                     control={form.control}
@@ -103,8 +115,8 @@ export function LoginForm() {
                 )}
             </Box>
 
-            <LoginFooter />
-            <SocialMediaButtons />
+            <LoginFooter/>
+            <SocialMediaButtons/>
         </LoginCard>
     );
 }
